@@ -3,6 +3,7 @@ package utest;
 import utest.Assertation;
 
 class TestResult {
+  public var instanceName  : String;
   public var pack          : String;
   public var cls           : String;
   public var method        : String;
@@ -14,10 +15,14 @@ class TestResult {
 
   public static function ofHandler(handler : TestHandler<Dynamic>) {
     var r = new TestResult();
-    var path = Type.getClassName(Type.getClass(handler.fixture.target)).split('.');
+    var target = handler.fixture.target;
+    var path = Type.getClassName(Type.getClass(target)).split('.');
+    var instanceName = try{ Reflect.getProperty( target , "name" ); } catch(e:Dynamic) { null; };
+
     r.cls           = path.pop();
     r.pack          = path.join('.');
     r.method        = handler.fixture.method;
+    r.instanceName  = instanceName;
     r.setup         = handler.fixture.setup;
     r.teardown      = handler.fixture.teardown;
     r.assertations  = handler.results;

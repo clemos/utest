@@ -19,7 +19,8 @@ class PackageResult {
 
   public function addResult(result : TestResult, flattenPackage : Bool) {
     var pack = getOrCreatePackage(result.pack, flattenPackage, this);
-    var cls = getOrCreateClass(pack, result.cls, result.setup, result.teardown);
+    var className = result.instanceName != null ? result.instanceName : result.cls;
+    var cls = getOrCreateClass(pack, className, result.setup, result.teardown);
     var fix = createFixture(result.method, result.assertations);
     cls.add(fix);
   }
